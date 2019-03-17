@@ -9,18 +9,23 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MapView, { Marker, AnimatedRegion, Polyline } from 'react-native-maps';
-import haversine from "haversine";
+import  MapViewDirections  from 'react-native-maps-directions';
+import { NAVIGATION_KEY } from './keys';
 
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
-
+const ORIGIN = {latitude: LATITUDE, longitude: LONGITUDE}
 export default class App extends Component{
   
   state = {
     latitude: LATITUDE,
     longitude: LONGITUDE,
+    destination: {
+      latitude: 37.791141,
+      longitude: -122.431155
+    },
     coordinate: new AnimatedRegion({
       latitude: LATITUDE,
       longitude: LONGITUDE,
@@ -81,7 +86,7 @@ export default class App extends Component{
 
   render() {
     return (
-<View style={styles.container}>
+      <View style={styles.container}>
         <MapView
           style={styles.map}
           showUserLocation
@@ -89,6 +94,11 @@ export default class App extends Component{
           loadingEnabled
           region={this.getMapRegion()}
         >
+          <MapViewDirections
+            origin={ORIGIN}
+            destination={this.state.destination}
+            apikey={NAVIGATION_KEY}
+            />
           <Marker.Animated
             ref={marker => {
               this.marker = marker;
